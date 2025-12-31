@@ -1,0 +1,101 @@
+// Ø8 Protocol - Unified Human-First Music Protocol
+// Fuses CTAD (metadata/aesthetic) + SOVN (consent module)
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+// Declaration: The unified track registration
+// Combines CTAD metadata + SOVN consent + Ø8 scoring
+model Declaration {
+  id                String   @id @default(cuid())
+
+  // Blockchain references
+  contractId        String?  // Contract address
+  tokenId           Int?     // NFT token ID
+  txHash            String?  // Mint transaction hash
+
+  // Track metadata (CTAD layer)
+  title             String
+  artistName        String
+  artistWallet      String
+
+  // AI contribution scores (0-100)
+  aiMelody          Int      @default(0)
+  aiLyrics          Int      @default(0)
+  aiStems           Int      @default(0)
+  aiMastering       Int      @default(0)
+
+  // Computed scores
+  transparencyScore Int      @default(0)
+  humanScore        Int      @default(100)
+
+  // Contributor splits (JSON array)
+  contributorSplits Json     @default("[]")
+
+  // IPFS + verification
+  ipfsCID           String
+  sha256            String
+
+  // SOVN consent toggles
+  trainingRights    Boolean  @default(false)
+  derivativeRights  Boolean  @default(false)
+  remixRights       Boolean  @default(false)
+  consentLocked     Boolean  @default(false)
+  splitsLocked      Boolean  @default(false)
+
+  // Badge earned
+  badge             String?  // "HUMAN_CRAFTED", "AI_DISCLOSED", "SOVEREIGN", etc.
+
+  // Timestamps
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  mintedAt          DateTime?
+
+  // Indexes for common queries
+  @@index([artistWallet])
+  @@index([tokenId])
+  @@index([transparencyScore])
+  @@index([badge])
+}
+
+// LicenseRequest: Track licensing requests (SOVN enforcement)
+model LicenseRequest {
+  id              String   @id @default(cuid())
+  declarationId   String
+  requesterWallet String
+  requesterName   String?
+  permissionType  String   // "training", "derivative", "remix"
+  status          String   @default("pending") // "pending", "approved", "denied"
+
+  // Optional payment info
+  paymentTxHash   String?
+  paymentAmount   String?  // In Ø8 tokens
+
+  createdAt       DateTime @default(now())
+  respondedAt     DateTime?
+
+  @@index([declarationId])
+  @@index([requesterWallet])
+  @@index([status])
+}
+
+// RewardHistory: Track Ø8 token rewards
+model RewardHistory {
+  id              String   @id @default(cuid())
+  declarationId   String
+  artistWallet    String
+  rewardType      String   // "human_crafted", "transparent", "consent_locked", "early_adopter"
+  amount          String   // Token amount in wei
+  txHash          String?
+
+  createdAt       DateTime @default(now())
+
+  @@index([artistWallet])
+  @@index([declarationId])
+}
