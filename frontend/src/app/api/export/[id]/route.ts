@@ -22,8 +22,8 @@ export async function GET(
 
     // Format as Ø8 metadata standard
     const metadata = {
-      $schema: "https://o8.protocol/schema/v1",
-      version: "1.0.0",
+      $schema: "https://o8.protocol/schema/v2",
+      version: "2.0.0",
       protocol: "O8",
 
       // Track info
@@ -34,31 +34,38 @@ export async function GET(
         contract_address: declaration.contractId,
       },
 
-      // AI contribution disclosure
+      // AI contribution disclosure — 5 phases
       ai_contributions: {
-        melody: declaration.aiMelody,
-        lyrics: declaration.aiLyrics,
-        stems: declaration.aiStems,
+        composition: declaration.aiComposition,
+        arrangement: declaration.aiArrangement,
+        production: declaration.aiProduction,
+        mixing: declaration.aiMixing,
         mastering: declaration.aiMastering,
         average: Math.round(
-          (declaration.aiMelody +
-            declaration.aiLyrics +
-            declaration.aiStems +
+          (declaration.aiComposition +
+            declaration.aiArrangement +
+            declaration.aiProduction +
+            declaration.aiMixing +
             declaration.aiMastering) /
-            4
+            5
         ),
       },
 
       // Scores
       scores: {
         transparency: declaration.transparencyScore,
-        human: declaration.humanScore,
       },
 
-      // Badge
-      badge: {
-        type: declaration.badge,
-        label: declaration.badge?.replace("_", "-"),
+      // Badges (process-based, comma-separated)
+      badges: declaration.badge?.split(",") || [],
+
+      // Methodology
+      methodology: declaration.methodology,
+
+      // Lineage
+      lineage: {
+        parent_declaration_id: declaration.parentDeclarationId,
+        parent_relation: declaration.parentRelation,
       },
 
       // SOVN consent

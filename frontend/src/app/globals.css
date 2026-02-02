@@ -66,95 +66,122 @@
   --radius-full: 0px;
 }
 
-/* Base styles */
-html {
-  background-color: var(--color-void);
-  color: var(--color-bone);
+/*
+  All base styles go in @layer base so Tailwind utility classes
+  (which live in @layer utilities) can override them.
+*/
+@layer base {
+  html {
+    background-color: var(--color-void);
+    color: var(--color-bone);
+  }
+
+  body {
+    background-color: var(--color-void);
+    color: var(--color-bone);
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background-color: var(--color-signal);
+    color: var(--color-void);
+  }
+
+  *:focus {
+    outline: none;
+  }
+
+  *:focus-visible {
+    outline: 1px solid var(--color-silver);
+    outline-offset: 2px;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--color-void);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-iron);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-silver);
+  }
+
+  input,
+  textarea,
+  select {
+    background-color: var(--color-graphite);
+    border: 1px solid var(--color-iron);
+    color: var(--color-bone);
+    font-family: inherit;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--color-silver);
+  }
+
+  input:focus,
+  textarea:focus,
+  select:focus {
+    border-color: var(--color-silver);
+    outline: none;
+  }
+
+  button {
+    font-family: inherit;
+    cursor: pointer;
+  }
+
+  a {
+    color: var(--color-bone);
+    text-decoration: none;
+  }
+
+  a:hover {
+    opacity: 0.85;
+  }
+
+  code,
+  pre,
+  .font-mono {
+    font-family: 'JetBrains Mono', monospace;
+  }
 }
 
-body {
-  background-color: var(--color-void);
-  color: var(--color-bone);
-  font-family: 'Inter', system-ui, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* RainbowKit modal overrides — match Ø8 aesthetic
+   These stay outside @layer so they beat RainbowKit's inline styles */
+[data-rk],
+[data-rk] *,
+[data-rk] *::before,
+[data-rk] *::after {
+  border-radius: 0px !important;
+  font-family: 'Inter', system-ui, sans-serif !important;
 }
 
-/* Selection */
-::selection {
-  background-color: var(--color-signal);
-  color: var(--color-void);
+[data-rk] [role="dialog"] {
+  border: 1px solid var(--color-iron) !important;
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.6) !important;
 }
 
-/* Focus styles */
-*:focus {
-  outline: none;
+[data-rk] button {
+  transition: opacity 100ms !important;
 }
 
-*:focus-visible {
-  outline: 1px solid var(--color-silver);
-  outline-offset: 2px;
-}
-
-/* Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--color-void);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--color-iron);
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-silver);
-}
-
-/* Remove default input styles */
-input,
-textarea,
-select {
-  background-color: var(--color-graphite);
-  border: 1px solid var(--color-iron);
-  color: var(--color-bone);
-  font-family: inherit;
-}
-
-input::placeholder,
-textarea::placeholder {
-  color: var(--color-silver);
-}
-
-input:focus,
-textarea:focus,
-select:focus {
-  border-color: var(--color-silver);
-  outline: none;
-}
-
-/* Button reset */
-button {
-  font-family: inherit;
-  cursor: pointer;
-}
-
-/* Link styles */
-a {
-  color: var(--color-bone);
-  text-decoration: none;
-}
-
-a:hover {
+[data-rk] button:hover {
   opacity: 0.85;
 }
 
-/* Code and monospace */
-code,
-pre,
-.font-mono {
-  font-family: 'JetBrains Mono', monospace;
+/* Force black text on RainbowKit accent-colored elements */
+[data-rk] [data-accent-color],
+[data-rk] [data-accent-color] * {
+  color: #0A0A0A !important;
 }

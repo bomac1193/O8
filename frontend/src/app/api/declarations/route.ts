@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
     const badge = searchParams.get("badge");
     const minScore = searchParams.get("minScore");
     const artist = searchParams.get("artist");
-    const humanOnly = searchParams.get("humanOnly") === "true";
+    const artistName = searchParams.get("artistName");
     const limit = parseInt(searchParams.get("limit") || "50");
     const offset = parseInt(searchParams.get("offset") || "0");
 
@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
     const where: Record<string, unknown> = {};
 
     if (badge) {
-      where.badge = badge;
+      where.badge = { contains: badge };
     }
 
     if (minScore) {
@@ -29,8 +29,8 @@ export async function GET(request: NextRequest) {
       where.artistWallet = artist;
     }
 
-    if (humanOnly) {
-      where.badge = "HUMAN_CRAFTED";
+    if (artistName) {
+      where.artistName = { contains: artistName };
     }
 
     const [declarations, total] = await Promise.all([
@@ -58,6 +58,115 @@ export async function GET(request: NextRequest) {
   }
 }
 
+// Calculate completeness-based transparency score
+function calculateTransparencyScore(body: {
+  aiComposition?: number;
+  aiArrangement?: number;
+  aiProduction?: number;
+  aiMixing?: number;
+  aiMastering?: number;
+  methodology?: string;
+  daws?: string;
+  plugins?: string;
+  aiModels?: string;
+  ipfsCID?: string;
+  sha256?: string;
+  contributorSplits?: unknown[];
+}): number {
+  let score = 0;
+
+  // +30 for declaring at all
+  score += 30;
+
+  // +20 for filling in AI phase values (4pts per phase)
+  const phases = [
+    body.aiComposition,
+    body.aiArrangement,
+    body.aiProduction,
+    body.aiMixing,
+    body.aiMastering,
+  ];
+  for (const phase of phases) {
+    if (phase !== undefined && phase !== null) {
+      score += 4;
+    }
+  }
+
+  // +15 for methodology (scaled by length)
+  if (body.methodology) {
+    const methodologyScore = Math.min(body.methodology.length / 200, 1) * 15;
+    score += Math.round(methodologyScore);
+  }
+
+  // +15 for creative stack detail (3pts per tool, max 15)
+  const stackItems = [
+    ...(body.daws?.split(",").filter(Boolean) || []),
+    ...(body.plugins?.split(",").filter(Boolean) || []),
+    ...(body.aiModels?.split(",").filter(Boolean) || []),
+  ];
+  score += Math.min(stackItems.length * 3, 15);
+
+  // +10 for provenance (CID + hash)
+  if (body.ipfsCID) score += 5;
+  if (body.sha256) score += 5;
+
+  // +10 for listing collaborators
+  if (
+    Array.isArray(body.contributorSplits) &&
+    body.contributorSplits.length > 0
+  ) {
+    score += 10;
+  }
+
+  return Math.min(score, 100);
+}
+
+// Determine process-based badges
+function determineBadges(body: {
+  daws?: string;
+  plugins?: string;
+  aiModels?: string;
+  methodology?: string;
+  contributorSplits?: unknown[];
+  ipfsCID?: string;
+  sha256?: string;
+}): string {
+  const badges: string[] = [];
+
+  // DECLARED — always gets this
+  badges.push("DECLARED");
+
+  // DEEP_STACK — 5+ tools in creative stack
+  const stackItems = [
+    ...(body.daws?.split(",").filter(Boolean) || []),
+    ...(body.plugins?.split(",").filter(Boolean) || []),
+    ...(body.aiModels?.split(",").filter(Boolean) || []),
+  ];
+  if (stackItems.length >= 5) {
+    badges.push("DEEP_STACK");
+  }
+
+  // PROCESS_DOC — methodology > 200 chars
+  if (body.methodology && body.methodology.length > 200) {
+    badges.push("PROCESS_DOC");
+  }
+
+  // MULTIPLAYER — has collaborators
+  if (
+    Array.isArray(body.contributorSplits) &&
+    body.contributorSplits.length > 0
+  ) {
+    badges.push("MULTIPLAYER");
+  }
+
+  // FULL_LINEAGE — has source material links (CID + hash)
+  if (body.ipfsCID && body.sha256) {
+    badges.push("FULL_LINEAGE");
+  }
+
+  return badges.join(",");
+}
+
 // POST /api/declarations - Create a new declaration
 export async function POST(request: NextRequest) {
   try {
@@ -67,9 +176,10 @@ export async function POST(request: NextRequest) {
       title,
       artistName,
       artistWallet,
-      aiMelody,
-      aiLyrics,
-      aiStems,
+      aiComposition,
+      aiArrangement,
+      aiProduction,
+      aiMixing,
       aiMastering,
       ipfsCID,
       sha256,
@@ -80,56 +190,66 @@ export async function POST(request: NextRequest) {
       tokenId,
       contractId,
       txHash,
+      methodology,
+      daws,
+      plugins,
+      aiModels,
+      parentDeclarationId,
+      parentRelation,
     } = body;
 
-    // Validate required fields
-    if (!title || !artistName || !artistWallet || !ipfsCID || !sha256) {
+    // Validate required fields (wallet is now optional)
+    if (!artistName) {
       return NextResponse.json(
-        { error: "Missing required fields" },
+        { error: "Artist name is required" },
         { status: 400 }
       );
     }
 
-    // Calculate scores
-    const avgAI = (aiMelody + aiLyrics + aiStems + aiMastering) / 4;
-    let transparencyScore = Math.round(100 - avgAI);
-    if (aiMelody > 0 || aiLyrics > 0 || aiStems > 0 || aiMastering > 0) {
-      transparencyScore = Math.min(100, transparencyScore + 5);
-    }
-    const humanScore = Math.round(100 - avgAI);
+    // Calculate completeness-based transparency score
+    const transparencyScore = calculateTransparencyScore({
+      aiComposition,
+      aiArrangement,
+      aiProduction,
+      aiMixing,
+      aiMastering,
+      methodology,
+      daws,
+      plugins,
+      aiModels,
+      ipfsCID,
+      sha256,
+      contributorSplits,
+    });
 
-    // Determine badge
-    const isHumanCrafted =
-      aiMelody < 20 &&
-      aiLyrics < 20 &&
-      aiStems < 20 &&
-      aiMastering < 20 &&
-      transparencyScore >= 80;
-
-    let badge = "TRANSPARENT";
-    if (isHumanCrafted) {
-      badge = "HUMAN_CRAFTED";
-    } else if (!trainingRights) {
-      badge = "SOVEREIGN";
-    } else if (trainingRights && derivativeRights && remixRights) {
-      badge = "FULL_CONSENT";
-    } else if (transparencyScore >= 60) {
-      badge = "AI_DISCLOSED";
-    }
+    // Determine process-based badges
+    const badge = determineBadges({
+      daws,
+      plugins,
+      aiModels,
+      methodology,
+      contributorSplits,
+      ipfsCID,
+      sha256,
+    });
 
     const declaration = await prisma.declaration.create({
       data: {
-        title,
+        title: title || "",
         artistName,
-        artistWallet,
-        aiMelody: aiMelody || 0,
-        aiLyrics: aiLyrics || 0,
-        aiStems: aiStems || 0,
+        artistWallet: artistWallet || null,
+        authMethod: artistWallet ? "wallet" : "anonymous",
+        aiComposition: aiComposition || 0,
+        aiArrangement: aiArrangement || 0,
+        aiProduction: aiProduction || 0,
+        aiMixing: aiMixing || 0,
         aiMastering: aiMastering || 0,
         transparencyScore,
-        humanScore,
-        ipfsCID,
-        sha256,
+        methodology: methodology || null,
+        parentDeclarationId: parentDeclarationId || null,
+        parentRelation: parentRelation || null,
+        ipfsCID: ipfsCID || "",
+        sha256: sha256 || "",
         trainingRights: trainingRights || false,
         derivativeRights: derivativeRights || false,
         remixRights: remixRights || false,

@@ -20,7 +20,19 @@ export async function GET(
       );
     }
 
-    return NextResponse.json(declaration);
+    // Also fetch child declarations (lineage)
+    const childDeclarations = await prisma.declaration.findMany({
+      where: { parentDeclarationId: id },
+      select: {
+        id: true,
+        title: true,
+        artistName: true,
+        parentRelation: true,
+        createdAt: true,
+      },
+    });
+
+    return NextResponse.json({ ...declaration, childDeclarations });
   } catch (error) {
     console.error("Error fetching declaration:", error);
     return NextResponse.json(
@@ -48,6 +60,7 @@ export async function PATCH(
         mintedAt: body.tokenId ? new Date() : undefined,
         consentLocked: body.consentLocked,
         splitsLocked: body.splitsLocked,
+        artistWallet: body.artistWallet,
       },
     });
 

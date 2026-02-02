@@ -21,26 +21,34 @@ model Declaration {
   txHash            String?  // Mint transaction hash
 
   // Track metadata (CTAD layer)
-  title             String
+  title             String   @default("")
   artistName        String
-  artistWallet      String
+  artistWallet      String?
+  authMethod        String   @default("anonymous")
 
-  // AI contribution scores (0-100)
-  aiMelody          Int      @default(0)
-  aiLyrics          Int      @default(0)
-  aiStems           Int      @default(0)
+  // AI contribution scores (0-100) — 5 phases
+  aiComposition     Int      @default(0)
+  aiArrangement     Int      @default(0)
+  aiProduction      Int      @default(0)
+  aiMixing          Int      @default(0)
   aiMastering       Int      @default(0)
 
   // Computed scores
   transparencyScore Int      @default(0)
-  humanScore        Int      @default(100)
+
+  // Methodology description
+  methodology       String?
+
+  // Lineage
+  parentDeclarationId String?
+  parentRelation      String?
 
   // Contributor splits (JSON array)
   contributorSplits Json     @default("[]")
 
   // IPFS + verification
-  ipfsCID           String
-  sha256            String
+  ipfsCID           String   @default("")
+  sha256            String   @default("")
 
   // SOVN consent toggles
   trainingRights    Boolean  @default(false)
@@ -59,6 +67,7 @@ model Declaration {
 
   // Indexes for common queries
   @@index([artistWallet])
+  @@index([artistName])
   @@index([tokenId])
   @@index([transparencyScore])
   @@index([badge])

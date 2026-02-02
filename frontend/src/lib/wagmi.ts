@@ -27,20 +27,6 @@ export const config = getDefaultConfig({
   ssr: true,
 });
 
-// Badge types
-export const BADGE_TYPES = {
-  HUMAN_CRAFTED: "Human-Crafted",
-  AI_DISCLOSED: "AI-Disclosed",
-  SOVEREIGN: "Sovereign",
-  FULL_CONSENT: "Full Consent",
-  TRANSPARENT: "Transparent",
-} as const;
-
-// Badge colors
-export const BADGE_COLORS: Record<string, string> = {
-  HUMAN_CRAFTED: "bg-emerald-500",
-  AI_DISCLOSED: "bg-blue-500",
-  SOVEREIGN: "bg-purple-500",
-  FULL_CONSENT: "bg-amber-500",
-  TRANSPARENT: "bg-cyan-500",
-};
+// Badge types — process-based, not hierarchy
+// See lib/badges.ts for full badge system
+export { BADGE_DEFINITIONS, getBadges, computeBadges } from "./badges";

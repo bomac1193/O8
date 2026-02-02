@@ -13,11 +13,19 @@ export function Providers({ children }: { children: React.ReactNode }) {
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
         <RainbowKitProvider
-          theme={darkTheme({
-            accentColor: "#8B5CF6",
-            accentColorForeground: "white",
-            borderRadius: "medium",
-          })}
+          theme={{
+            ...darkTheme({
+              accentColor: "#F5F3F0",
+              accentColorForeground: "#0A0A0A",
+              borderRadius: "none",
+              fontStack: "system",
+              overlayBlur: "small",
+            }),
+            fonts: {
+              body: "'Inter', system-ui, sans-serif",
+            },
+          }}
+          modalSize="compact"
         >
           {children}
         </RainbowKitProvider>
