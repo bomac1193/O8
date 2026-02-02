@@ -423,96 +423,90 @@ export default function NewDeclaration() {
 
           {/* Production Intelligence Section */}
           <section className="p-6 bg-[#1A1A1A] border border-[#2A2A2A]">
-            <p className="text-xs uppercase tracking-widest text-[#8A8A8A] mb-6">
-              Production Intelligence
-            </p>
-
-            {/* Quick-start presets */}
-            <div className="flex flex-wrap gap-2 mb-6">
-              {Object.keys(AI_PRESETS).map((preset) => (
+            <div className="flex items-center justify-between mb-4">
+              <p className="text-xs uppercase tracking-widest text-[#8A8A8A]">
+                AI Contribution
+              </p>
+              <div className="flex gap-1.5">
+                {Object.keys(AI_PRESETS).map((preset) => (
+                  <button
+                    key={preset}
+                    type="button"
+                    onClick={() => applyPreset(preset)}
+                    className="px-2 py-1 text-[10px] border border-[#2A2A2A] text-[#8A8A8A] hover:border-[#8A8A8A] hover:text-[#F5F3F0] transition-colors duration-100"
+                  >
+                    {preset}
+                  </button>
+                ))}
                 <button
-                  key={preset}
                   type="button"
-                  onClick={() => applyPreset(preset)}
-                  className="px-3 py-1.5 text-xs border border-[#2A2A2A] text-[#8A8A8A] hover:border-[#8A8A8A] hover:text-[#F5F3F0] transition-colors duration-100"
+                  onClick={() => setAiContribution({ composition: 0, arrangement: 0, production: 0, mixing: 0, mastering: 0 })}
+                  className="px-2 py-1 text-[10px] border border-[#2A2A2A] text-[#8A8A8A] hover:border-[#8A8A8A] hover:text-[#F5F3F0] transition-colors duration-100"
                 >
-                  {preset}
+                  Reset
                 </button>
-              ))}
-              <button
-                type="button"
-                onClick={() => setAiContribution({ composition: 0, arrangement: 0, production: 0, mixing: 0, mastering: 0 })}
-                className="px-3 py-1.5 text-xs border border-[#2A2A2A] text-[#8A8A8A] hover:border-[#8A8A8A] hover:text-[#F5F3F0] transition-colors duration-100"
-              >
-                Custom
-              </button>
+              </div>
             </div>
 
-            <p className="text-sm text-[#8A8A8A] mb-6">
-              Estimate AI contribution for each phase (0-100%)
-            </p>
-            <div className="space-y-6">
+            <div className="space-y-1.5">
               {[
-                { key: "composition", label: "Composition" },
-                { key: "arrangement", label: "Arrangement" },
-                { key: "production", label: "Production" },
-                { key: "mixing", label: "Mixing" },
-                { key: "mastering", label: "Mastering" },
-              ].map(({ key, label }) => (
-                <div key={key}>
-                  <div className="flex justify-between mb-2">
-                    <label className="text-sm text-[#8A8A8A]">{label}</label>
-                    <span className="text-sm text-[#F5F3F0] font-mono">
-                      {Math.round(aiContribution[key as keyof AIContribution] * 100)}%
+                { key: "composition", label: "COMP" },
+                { key: "arrangement", label: "ARR" },
+                { key: "production", label: "PROD" },
+                { key: "mixing", label: "MIX" },
+                { key: "mastering", label: "MSTR" },
+              ].map(({ key, label }) => {
+                const val = Math.round(aiContribution[key as keyof AIContribution] * 100);
+                return (
+                  <div key={key} className="flex items-center gap-2">
+                    <span className="w-9 text-[10px] text-[#8A8A8A] font-mono shrink-0">
+                      {label}
+                    </span>
+                    <div className="relative flex-1 h-5">
+                      <div
+                        className="absolute top-0 left-0 h-full bg-[#F5F3F0] opacity-[0.08] pointer-events-none transition-all duration-75"
+                        style={{ width: `${val}%` }}
+                      />
+                      <input
+                        type="range"
+                        min="0"
+                        max="100"
+                        value={val}
+                        onChange={(e) =>
+                          updateAI(key as keyof AIContribution, Number(e.target.value) / 100)
+                        }
+                        className="o8-slider absolute inset-0 w-full h-full"
+                      />
+                    </div>
+                    <span className="w-8 text-right text-[10px] text-[#F5F3F0] font-mono tabular-nums shrink-0">
+                      {val}
                     </span>
                   </div>
-                  <input
-                    type="range"
-                    min="0"
-                    max="100"
-                    value={aiContribution[key as keyof AIContribution] * 100}
-                    onChange={(e) =>
-                      updateAI(key as keyof AIContribution, Number(e.target.value) / 100)
-                    }
-                    className="w-full h-1 bg-[#2A2A2A] appearance-none cursor-pointer"
-                    style={{
-                      background: `linear-gradient(to right, #8A8A8A 0%, #8A8A8A ${aiContribution[key as keyof AIContribution] * 100}%, #2A2A2A ${aiContribution[key as keyof AIContribution] * 100}%, #2A2A2A 100%)`,
-                    }}
-                  />
-                </div>
-              ))}
+                );
+              })}
             </div>
 
-            <div className="mt-8">
-              <label className="block text-xs uppercase tracking-widest text-[#8A8A8A] mb-2">
-                Methodology
-              </label>
+            {/* Score + Avg inline */}
+            <div className="flex items-center justify-between mt-4 pt-3 border-t border-[#2A2A2A]">
+              <span className="text-[10px] text-[#8A8A8A] font-mono">
+                AVG AI {Math.round(avgAI * 100)}%
+              </span>
+              <span className="text-[10px] text-[#8A8A8A] font-mono">
+                SCORE {transparencyScore()}
+              </span>
+            </div>
+
+            <div className="mt-4">
               <textarea
                 value={methodology}
                 onChange={(e) => setMethodology(e.target.value)}
-                rows={4}
-                className="w-full px-4 py-3 bg-[#0A0A0A] border border-[#2A2A2A] text-[#F5F3F0] placeholder-[#8A8A8A] focus:border-[#8A8A8A] outline-none resize-none"
-                placeholder="Describe your creative process..."
+                rows={3}
+                className="w-full px-4 py-2.5 bg-[#0A0A0A] border border-[#2A2A2A] text-[#F5F3F0] placeholder-[#8A8A8A] focus:border-[#8A8A8A] outline-none resize-none text-sm"
+                placeholder="Methodology — describe your creative process..."
               />
-              <p className="text-xs text-[#8A8A8A] mt-1">
-                {methodology.length}/200+ chars for Process Doc badge
+              <p className="text-[10px] text-[#8A8A8A] mt-1">
+                {methodology.length}/200+ for Process Doc badge
               </p>
-            </div>
-
-            {/* Score Preview */}
-            <div className="mt-6 flex items-center justify-between">
-              <div>
-                <p className="text-xs text-[#8A8A8A]">Average AI</p>
-                <p className="text-lg text-[#F5F3F0] font-mono">
-                  {Math.round(avgAI * 100)}%
-                </p>
-              </div>
-              <div className="text-right">
-                <p className="text-xs text-[#8A8A8A]">Transparency Score</p>
-                <p className="text-lg text-[#F5F3F0] font-mono">
-                  {transparencyScore()}
-                </p>
-              </div>
             </div>
           </section>
 
