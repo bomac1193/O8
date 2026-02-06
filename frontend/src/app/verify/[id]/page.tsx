@@ -4,6 +4,7 @@ import { use, useState, useEffect } from "react";
 import Link from "next/link";
 import { getBadges } from "@/lib/badges";
 import { DeclarationBadge } from "@/components/DeclarationBadge";
+import { LineageTimeline } from "@/components/LineageTimeline";
 
 interface Declaration {
   id: string;
@@ -18,6 +19,10 @@ interface Declaration {
   transparencyScore: number;
   badge: string | null;
   methodology: string | null;
+  aiModels?: string | null;
+  daws?: string | null;
+  plugins?: string | null;
+  hardware?: string | null;
   parentDeclarationId: string | null;
   parentRelation: string | null;
   ipfsCID: string;
@@ -417,56 +422,25 @@ export default function VerifyPage({
           </div>
         </div>
 
-        {/* Lineage */}
-        {(declaration.parentDeclarationId || (declaration.childDeclarations && declaration.childDeclarations.length > 0)) && (
-          <div className="p-4 bg-[#1A1A1A] border border-[#2A2A2A] mb-6">
-            <p className="text-xs uppercase tracking-widest text-[#8A8A8A] mb-3">
-              Lineage
-            </p>
-            {declaration.parentDeclarationId && (
-              <div className="mb-4">
-                <p className="text-xs text-[#8A8A8A] mb-1">Parent Declaration</p>
-                <div className="flex items-center gap-2">
-                  <Link
-                    href={`/verify/${declaration.parentDeclarationId}`}
-                    className="text-[#F5F3F0] font-mono text-sm hover:text-[#8A8A8A] transition-colors duration-100"
-                  >
-                    {declaration.parentDeclarationId}
-                  </Link>
-                  {declaration.parentRelation && (
-                    <span className="px-2 py-0.5 text-xs uppercase tracking-widest bg-[#2A2A2A] text-[#8A8A8A]">
-                      {declaration.parentRelation}
-                    </span>
-                  )}
-                </div>
-              </div>
-            )}
-            {declaration.childDeclarations && declaration.childDeclarations.length > 0 && (
-              <div>
-                <p className="text-xs text-[#8A8A8A] mb-2">Derived Works</p>
-                <div className="space-y-2">
-                  {declaration.childDeclarations.map((child) => (
-                    <Link
-                      key={child.id}
-                      href={`/verify/${child.id}`}
-                      className="flex items-center justify-between p-3 bg-[#0A0A0A] border border-[#2A2A2A] hover:border-[#8A8A8A] transition-colors duration-100"
-                    >
-                      <div>
-                        <p className="text-sm text-[#F5F3F0]">{child.title || "Untitled"}</p>
-                        <p className="text-xs text-[#8A8A8A]">{child.artistName}</p>
-                      </div>
-                      {child.parentRelation && (
-                        <span className="px-2 py-0.5 text-xs uppercase tracking-widest bg-[#2A2A2A] text-[#8A8A8A]">
-                          {child.parentRelation}
-                        </span>
-                      )}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-        )}
+        {/* Lineage Timeline - Enhanced Visualization */}
+        <LineageTimeline
+          currentDeclarationId={declaration.id}
+          currentDeclaration={{
+            id: declaration.id,
+            title: declaration.title,
+            artistName: declaration.artistName,
+            transparencyScore: declaration.transparencyScore,
+            aiComposition: declaration.aiComposition,
+            aiArrangement: declaration.aiArrangement,
+            aiProduction: declaration.aiProduction,
+            aiMixing: declaration.aiMixing,
+            aiMastering: declaration.aiMastering,
+            aiModels: declaration.aiModels,
+            daws: declaration.daws,
+            plugins: declaration.plugins,
+            createdAt: declaration.createdAt,
+          }}
+        />
 
         {/* Provenance */}
         <div className="p-4 bg-[#1A1A1A] border border-[#2A2A2A] mb-6">
