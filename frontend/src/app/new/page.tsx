@@ -721,7 +721,7 @@ export default function NewDeclaration() {
                     type="button"
                     onClick={() => setter(!value)}
                     className={`w-10 h-5 rounded-full transition-colors duration-100 ${
-                      value ? "bg-[#8A8A8A]" : "bg-[#2A2A2A]"
+                      value ? "bg-[#2A2A2A]" : "bg-[#2A2A2A]"
                     }`}
                   >
                     <div
