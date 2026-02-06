@@ -38,6 +38,7 @@ const COLLABORATOR_ROLES = [
 
 const RELATIONSHIP_TYPES = [
   { value: "", label: "None" },
+  { value: "original", label: "Original" },
   { value: "remix", label: "Remix" },
   { value: "cover", label: "Cover" },
   { value: "sample", label: "Sample" },
@@ -730,9 +731,9 @@ function NewDeclarationForm() {
                   onChange={(e) => setPromptVisibility(e.target.value as "public" | "private" | "paywalled")}
                   className="px-2 py-1 text-xs bg-[#1A1A1A] border border-[#2A2A2A] text-[#F5F3F0] outline-none"
                 >
-                  <option value="private">Private (Keep secret)</option>
+                  <option value="private">Private (Keep hidden)</option>
                   <option value="public">Public (Full transparency)</option>
-                  <option value="paywalled">Paywalled (Future)</option>
+                  <option value="paywalled">Paid Access (Monetize prompt)</option>
                 </select>
               </div>
               <textarea
@@ -745,9 +746,9 @@ function NewDeclarationForm() {
                   : "Your exact AI prompt (will be visible to all)"}
               />
               <p className="text-[10px] text-[#8A8A8A] mt-1">
-                {promptVisibility === "private" && "🔒 Prompt will be kept private"}
+                {promptVisibility === "private" && "Prompt will be kept private (not shown on declaration page)"}
                 {promptVisibility === "public" && "🌐 Prompt will be publicly visible (+5 transparency bonus)"}
-                {promptVisibility === "paywalled" && "💰 Prompt access requires payment (coming soon)"}
+                {promptVisibility === "paywalled" && "💰 Fans must pay to view prompt (smart contract revenue split)"}
               </p>
             </div>
           </section>
@@ -831,21 +832,31 @@ function NewDeclarationForm() {
 
           {/* Lineage Section */}
           <section className="p-6 bg-[#1A1A1A] border border-[#2A2A2A]">
-            <p className="text-xs uppercase tracking-widest text-[#8A8A8A] mb-6">
-              Lineage
-            </p>
+            <div className="flex items-start justify-between mb-6">
+              <div>
+                <p className="text-xs uppercase tracking-widest text-[#8A8A8A]">
+                  Lineage
+                </p>
+                <p className="text-[10px] text-[#8A8A8A] mt-1">
+                  Link to source material for remixes, samples, or derivative works
+                </p>
+              </div>
+            </div>
             <div className="space-y-4">
               <div>
                 <label className="block text-xs uppercase tracking-widest text-[#8A8A8A] mb-2">
-                  Source / Parent Declaration
+                  Source / Parent Declaration ID
                 </label>
                 <input
                   type="text"
                   value={parentDeclarationId}
                   onChange={(e) => setParentDeclarationId(e.target.value)}
                   className="w-full px-4 py-3 bg-[#0A0A0A] border border-[#2A2A2A] text-[#F5F3F0] placeholder-[#8A8A8A] focus:border-[#8A8A8A] outline-none font-mono text-sm"
-                  placeholder="CID or declaration ID (optional)"
+                  placeholder="∞8-cm5x8k2... (optional, for derivatives)"
                 />
+                <p className="text-[10px] text-[#8A8A8A] mt-1">
+                  Declaration ID from the gallery (e.g., ∞8-cm5x8k2...) - Used for tracking creative lineage
+                </p>
               </div>
               <div>
                 <label className="block text-xs uppercase tracking-widest text-[#8A8A8A] mb-2">
@@ -866,9 +877,16 @@ function NewDeclarationForm() {
 
           {/* Provenance Section with Drag & Drop */}
           <section className="p-6 bg-[#1A1A1A] border border-[#2A2A2A]">
-            <p className="text-xs uppercase tracking-widest text-[#8A8A8A] mb-6">
-              Provenance
-            </p>
+            <div className="flex items-start justify-between mb-6">
+              <div>
+                <p className="text-xs uppercase tracking-widest text-[#8A8A8A]">
+                  Provenance
+                </p>
+                <p className="text-[10px] text-[#8A8A8A] mt-1">
+                  Upload audio file → Auto-generates IPFS CID + SHA-256 hash for immutable proof
+                </p>
+              </div>
+            </div>
 
             {/* Drag & Drop Upload */}
             <div
@@ -913,27 +931,35 @@ function NewDeclarationForm() {
             <div className="space-y-4">
               <div>
                 <label className="block text-xs uppercase tracking-widest text-[#8A8A8A] mb-2">
-                  IPFS CID
+                  IPFS CID {ipfsCID && <span className="text-[#4A7C59] ml-2">✓</span>}
                 </label>
                 <input
                   type="text"
                   value={ipfsCID}
                   onChange={(e) => setIpfsCID(e.target.value)}
                   className="w-full px-4 py-3 bg-[#0A0A0A] border border-[#2A2A2A] text-[#F5F3F0] placeholder-[#8A8A8A] focus:border-[#8A8A8A] outline-none font-mono text-sm"
-                  placeholder="Qm... or bafk..."
+                  placeholder="Auto-filled on upload (Qm... or bafk...)"
+                  readOnly={isUploading}
                 />
+                <p className="text-[10px] text-[#8A8A8A] mt-1">
+                  Content-addressed storage ID - Points to your actual audio file on IPFS
+                </p>
               </div>
               <div>
                 <label className="block text-xs uppercase tracking-widest text-[#8A8A8A] mb-2">
-                  SHA-256 Hash
+                  SHA-256 Hash {sha256Hash && <span className="text-[#4A7C59] ml-2">✓</span>}
                 </label>
                 <input
                   type="text"
                   value={sha256Hash}
                   onChange={(e) => setSha256Hash(e.target.value)}
                   className="w-full px-4 py-3 bg-[#0A0A0A] border border-[#2A2A2A] text-[#F5F3F0] placeholder-[#8A8A8A] focus:border-[#8A8A8A] outline-none font-mono text-sm"
-                  placeholder="Auto-computed on upload or enter manually"
+                  placeholder="Auto-computed on upload"
+                  readOnly={isUploading}
                 />
+                <p className="text-[10px] text-[#8A8A8A] mt-1">
+                  Cryptographic fingerprint - Proves file integrity and prevents tampering
+                </p>
               </div>
             </div>
           </section>
