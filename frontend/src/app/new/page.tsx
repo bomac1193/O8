@@ -464,7 +464,7 @@ export default function NewDeclaration() {
                     </span>
                     <div className="relative flex-1 h-5">
                       <div
-                        className="absolute top-0 left-0 h-full bg-[#8A8A8A] opacity-20 pointer-events-none transition-all duration-75 rounded-full"
+                        className="absolute top-0 left-0 h-full bg-[#F5F3F0] opacity-30 pointer-events-none transition-all duration-75 rounded-full"
                         style={{ width: `${val}%` }}
                       />
                       <input
