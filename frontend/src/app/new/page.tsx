@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useState, useCallback, useRef, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { useAccount, useWriteContract, useWaitForTransactionReceipt } from "wagmi";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
@@ -51,7 +51,7 @@ const AI_PRESETS: Record<string, AIContribution> = {
   "AI-Native": { composition: 0.7, arrangement: 0.65, production: 0.6, mixing: 0.3, mastering: 0.5 },
 };
 
-export default function NewDeclaration() {
+function NewDeclarationForm() {
   const { address, isConnected } = useAccount();
   const { writeContract, data: hash, isPending } = useWriteContract();
   const { isLoading: isConfirming, isSuccess: isMintSuccess } = useWaitForTransactionReceipt({ hash });
@@ -797,5 +797,18 @@ export default function NewDeclaration() {
         </form>
       </div>
     </div>
+  );
+}
+
+// Wrap in Suspense to handle useSearchParams()
+export default function NewDeclaration() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-[#0A0A0A] flex items-center justify-center">
+        <p className="text-[#8A8A8A]">Loading...</p>
+      </div>
+    }>
+      <NewDeclarationForm />
+    </Suspense>
   );
 }
