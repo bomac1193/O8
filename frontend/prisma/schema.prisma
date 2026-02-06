@@ -1,5 +1,5 @@
-// Ø8 Protocol - Unified Human-First Music Protocol
-// Fuses CTAD (metadata/aesthetic) + SOVN (consent module)
+// ∞8 ARCH - Declarations v1.0
+// Creative provenance protocol for AI-native music
 
 generator client {
   provider = "prisma-client"
@@ -7,11 +7,12 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 // Declaration: The unified track registration
-// Combines CTAD metadata + SOVN consent + Ø8 scoring
+// Combines CTAD metadata + SOVN consent + ∞8 ARCH scoring
 model Declaration {
   id                String   @id @default(cuid())
 
@@ -84,7 +85,7 @@ model LicenseRequest {
 
   // Optional payment info
   paymentTxHash   String?
-  paymentAmount   String?  // In Ø8 tokens
+  paymentAmount   String?  // In ∞8 tokens
 
   createdAt       DateTime @default(now())
   respondedAt     DateTime?
@@ -94,7 +95,7 @@ model LicenseRequest {
   @@index([status])
 }
 
-// RewardHistory: Track Ø8 token rewards
+// RewardHistory: Track ∞8 token rewards
 model RewardHistory {
   id              String   @id @default(cuid())
   declarationId   String
