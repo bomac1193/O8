@@ -120,37 +120,47 @@ export default function Home() {
               ONE-CLICK BOOKMARKLET
             </p>
             <p className="text-sm text-[#8A8A8A] mb-6">
-              Drag this button to your bookmarks bar. Click it while on suno.com to auto-fill your declaration.
+              Click the button below to copy the bookmarklet code, then follow the manual setup instructions.
             </p>
-            <a
-              href="javascript:(function(){if(!window.location.hostname.includes('suno')){alert('⚠️ Please run this bookmarklet while on suno.com');return;}let title='';let prompt='';let model='Suno';const titleSelectors=['[data-testid=&quot;song-title&quot;]','.song-title','h1','[class*=&quot;title&quot;]'];for(const selector of titleSelectors){const el=document.querySelector(selector);if(el&&el.textContent.trim()){title=el.textContent.trim();break;}}const promptSelectors=['[data-testid=&quot;prompt&quot;]','[class*=&quot;prompt&quot;]','textarea','[placeholder*=&quot;describe&quot;]'];for(const selector of promptSelectors){const el=document.querySelector(selector);if(el){prompt=el.value||el.textContent.trim();if(prompt)break;}}const versionMatch=document.body.textContent.match(/v[0-9.]+/i);if(versionMatch){model='Suno '+versionMatch[0];}if(!title&&!prompt){title='Untitled Track';prompt='Generated with Suno AI';}const baseUrl=window.location.hostname.includes('localhost')?'http://localhost:3000/new':'https://inf8.vercel.app/new';const params=new URLSearchParams({title:title||'Untitled Track',prompt:prompt||'AI-generated track',model:model,artist:'Your Name'});const url=`${baseUrl}?${params.toString()}`;window.open(url,'_blank');alert('✅ Opening ∞8 ARCH declaration form with Suno data!');})();"
-              className="inline-block px-6 py-3 bg-[#1A1A1A] border border-[#8A8A8A] text-[#F5F3F0] text-sm font-medium hover:bg-[#2A2A2A] transition-colors duration-100 cursor-move"
-              onClick={(e) => e.preventDefault()}
+            <button
+              onClick={() => {
+                const bookmarkletCode = `javascript:(function(){if(!window.location.hostname.includes('suno')){alert('⚠️ Please run this bookmarklet while on suno.com');return;}let title='';let prompt='';let model='Suno';const titleSelectors=['[data-testid="song-title"]','.song-title','h1','[class*="title"]'];for(const selector of titleSelectors){const el=document.querySelector(selector);if(el&&el.textContent.trim()){title=el.textContent.trim();break;}}const promptSelectors=['[data-testid="prompt"]','[class*="prompt"]','textarea','[placeholder*="describe"]'];for(const selector of promptSelectors){const el=document.querySelector(selector);if(el){prompt=el.value||el.textContent.trim();if(prompt)break;}}const versionMatch=document.body.textContent.match(/v[0-9.]+/i);if(versionMatch){model='Suno '+versionMatch[0];}if(!title&&!prompt){title='Untitled Track';prompt='Generated with Suno AI';}const baseUrl=window.location.hostname.includes('localhost')?'http://localhost:3000/new':'https://inf8.vercel.app/new';const params=new URLSearchParams({title:title||'Untitled Track',prompt:prompt||'AI-generated track',model:model,artist:'Your Name'});const url=\`\${baseUrl}?\${params.toString()}\`;window.open(url,'_blank');alert('✅ Opening ∞8 ARCH declaration form with Suno data!');})();`;
+                navigator.clipboard.writeText(bookmarkletCode);
+                alert('✅ Bookmarklet code copied! Now follow the manual setup instructions below.');
+              }}
+              className="px-6 py-3 bg-[#1A1A1A] border border-[#8A8A8A] text-[#F5F3F0] text-sm font-medium hover:bg-[#2A2A2A] transition-colors duration-100"
             >
-              ∞8 + Suno
-            </a>
+              Copy Bookmarklet Code
+            </button>
           </div>
 
           <div className="space-y-4">
+            <p className="text-sm text-[#F5F3F0] font-medium mb-2">Manual Setup (One-Time):</p>
             <div className="flex items-start gap-4">
               <span className="text-[#8A8A8A] font-mono text-sm shrink-0">1.</span>
-              <p className="text-sm text-[#8A8A8A]">Drag the button above to your browser's bookmarks bar</p>
+              <p className="text-sm text-[#8A8A8A]">Click "Copy Bookmarklet Code" button above</p>
             </div>
             <div className="flex items-start gap-4">
               <span className="text-[#8A8A8A] font-mono text-sm shrink-0">2.</span>
-              <p className="text-sm text-[#8A8A8A]">Generate a track on suno.com</p>
+              <p className="text-sm text-[#8A8A8A]">Right-click on your Favorites Bar → Add page → Name it "∞8 + Suno"</p>
             </div>
             <div className="flex items-start gap-4">
               <span className="text-[#8A8A8A] font-mono text-sm shrink-0">3.</span>
-              <p className="text-sm text-[#8A8A8A]">Click the "∞8 + Suno" bookmark</p>
+              <p className="text-sm text-[#8A8A8A]">In the URL field, paste the copied code (Ctrl+V) → Save</p>
             </div>
+
+            <p className="text-sm text-[#F5F3F0] font-medium mb-2 mt-6">Using the Bookmarklet:</p>
             <div className="flex items-start gap-4">
               <span className="text-[#8A8A8A] font-mono text-sm shrink-0">4.</span>
-              <p className="text-sm text-[#8A8A8A]">Declaration form opens with track title, prompt, and AI model pre-filled</p>
+              <p className="text-sm text-[#8A8A8A]">Go to suno.com and generate a track</p>
             </div>
             <div className="flex items-start gap-4">
               <span className="text-[#8A8A8A] font-mono text-sm shrink-0">5.</span>
-              <p className="text-sm text-[#8A8A8A]">Add any additional details (collaborators, creative stack) and save</p>
+              <p className="text-sm text-[#8A8A8A]">Click the "∞8 + Suno" bookmark in your favorites bar</p>
+            </div>
+            <div className="flex items-start gap-4">
+              <span className="text-[#8A8A8A] font-mono text-sm shrink-0">6.</span>
+              <p className="text-sm text-[#8A8A8A]">Declaration form opens with track data pre-filled → Add details → Save</p>
             </div>
           </div>
         </div>
