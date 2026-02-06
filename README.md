@@ -4,28 +4,49 @@
 
 Creative provenance protocol for AI-native music.
 
+**Live:** [Coming soon - deploying to Vercel]
+**Repo:** https://github.com/bomac1193/inf8
+**Domain:** inf8.io (planned)
+
 ---
 
-## Who this is for
+## What ∞8 ARCH Does
+
+Prove your process. Immortalize your chain.
+
+Every ∞8 declaration contains:
+- **Identity**: Cryptographically verifiable artist identity, collaborators, contributors with revenue splits
+- **Creative Stack**: Every tool in your workflow—DAWs, plugins, AI models, hardware
+- **Production Intelligence**: Quantified AI contribution by phase (composition, arrangement, production, mixing, mastering)
+- **Provenance Chain**: IPFS CID links to source material, samples, stems—immutable revision history
+- **Audio Fingerprint**: SHA-256 verification linking declaration to output
+
+Machine-readable. Verifiable. Permanent.
+
+---
+
+## Who This Is For
 
 Masters-level producers using AI as serious creative tools, not crutches. Remix artists building complex derivative works who need verifiable source chains. Collaborative creators working across platforms, tools, and contributors who need attribution infrastructure. Forward-thinking labels building the next generation of music IP. Anyone who believes the future of music is multiplayer, generative, and AI-enabled.
 
-## Who this is not for
+---
 
-Traditional artists who view AI as a threat and refuse to engage with it. Producers ashamed of their tools who want to hide AI involvement. Legacy labels needing ISRC/ISWC backward compatibility. Listeners and consumers—this is infrastructure for makers. Anyone building for the music industry as it exists today rather than as it will exist in ten years. Platforms looking for surveillance or detection systems. Copyright lawyers seeking enforcement mechanisms.
+## Who This Is NOT For
 
-**If you read this and think "this isn't for me"—that's the point.** We're building infrastructure for the AI-native music economy. Most of the current industry won't come with us.
+Casual beatmakers chasing presets.
+AI toy users posting "Suno magic."
+Artists afraid to show their workflow.
+
+**Using AI tools isn't shameful. Hiding your process is.**
 
 ---
 
-## The Diagnosis
+## The Problem
 
-The music industry's metadata infrastructure was built for a world that no longer exists.
-
-**Assumptions baked into ISRC/ISWC:**
-- One artist makes one song
+The music industry's metadata infrastructure (ISRC/ISWC) was built for a world that no longer exists:
+- Assumes one artist makes one song
 - Songs are fixed, final products
-- Tools are invisible (who cares what DAW you used?)
+- Tools are invisible
 - Creation is individual, not networked
 
 **What AI-native music actually looks like:**
@@ -35,13 +56,13 @@ The music industry's metadata infrastructure was built for a world that no longe
 - Remix culture means every track has lineage; derivative works inherit source chains
 - Multiplayer creation is the norm, not the exception
 
-ISRC codes tell you nothing about how music was made. They identify; they don't illuminate. The metadata infrastructure for AI-native music creation does not exist.
+ISRC codes tell you nothing about how music was made. They identify; they don't illuminate.
 
-**This is the problem ∞8 ARCH solves.**
+**∞8 ARCH solves this.**
 
 ---
 
-## The Guiding Policy
+## The Solution
 
 **Build the provenance layer for AI-native music where process transparency becomes proof of mastery—not confession of assistance.**
 
@@ -49,111 +70,14 @@ Transparency is technique. Showing your process isn't defensive; it's demonstrat
 
 A producer who declares "88% AI melody, 35% AI arrangement" isn't admitting weakness. They're showing they understand their tools deeply enough to quantify and optimize their workflow. That's mastery.
 
-**Using AI tools isn't shameful. Using them poorly is.**
-
 ---
 
-## The Strategy
-
-Two objectives. Everything else is noise.
-
-### 1. Establish ∞8 as the machine-readable standard for creative provenance
-
-Every ∞8 declaration contains:
-- **Identity**: Artist, collaborators, contributors—cryptographically verifiable
-- **Creative Stack**: Every tool in the workflow—DAWs, plugins, AI models, hardware
-- **Production Intelligence**: Comprehensive process documentation with quantified AI contribution
-- **Provenance Chain**: IPFS CID links to source material, samples, stems
-- **Revision History**: Immutable record of creative evolution
-- **Audio Fingerprint**: SHA-256 hash linking declaration to output
-
-The declaration is JSON. Machine-readable. Platform-agnostic. Exportable to NFT metadata, streaming platforms, or any system that emerges.
-
-### 2. Serve the underserved: masters-level producers in the AI-native music economy
-
-Markets that don't exist at scale yet:
-- **Multiplayer music**: Tracks with 5-20+ contributors across different tools and platforms
-- **Remix/derivative culture**: Producers building on others' work with verifiable source chains
-- **Generative/evolutionary tracks**: Music that changes over time, where process history IS the art
-- **AI-assisted production**: Producers using AI tools who want to demonstrate sophisticated technique
-- **Provenance-as-asset**: Where the declaration itself has independent collector value
-
-These markets are emerging. ∞8 has first-mover advantage.
-
----
-
-## Isolating Mechanisms
-
-What makes this position defensible.
-
-**Current moats:**
-- **First-mover timing**: No competing standard exists for AI-native music provenance
-- **Cryptographic immutability**: Declarations are verifiable facts, not claims
-- **IPFS integration**: Decentralized infrastructure; can't be captured by any single platform
-- **Open protocol**: Adoption is frictionless; no licensing, no gatekeeping
-
-**Mechanisms to strengthen:**
-
-| Mechanism | Action |
-|-----------|--------|
-| Network effects | More tracks using ∞8 = more valuable standard. Critical mass creates lock-in. |
-| Platform integration | Reference implementations for streaming platforms, NFT marketplaces, DAWs |
-| Governance structure | Clear protocol evolution process; prevents fragmentation |
-| Flagship releases | Partner with forward-thinking artists for proof-of-concept tracks |
-| Institutional adoption | One major label or distributor adopting ∞8 creates cascade |
-
-**The goal: make ∞8 the default, not a choice.**
-
----
-
-## Blue Ocean: What We Do Differently
-
-**Eliminate:**
-- ISRC/ISWC compatibility (we're not building a bridge to the old system)
-- "Authenticity crisis" framing (defensive positioning serves no one)
-- Consumer-facing features (infrastructure for makers, not listeners)
-- Detection/surveillance use cases (we're not the music police)
-
-**Reduce:**
-- Declaration complexity (the protocol should disappear into workflow)
-- Barrier to adoption (JSON, open standard, no gatekeeping)
-
-**Raise:**
-- Process documentation depth (comprehensive creative stack, not just "AI: yes/no")
-- Cryptographic verification (declarations are facts, not claims)
-- Revision history (creative evolution as feature, not bug)
-- Multiplayer attribution (built for 20 contributors, not just 2)
-
-**Create:**
-- Production Intelligence Index (quantified process sophistication)
-- Remix lineage chains (derivative works inherit source provenance)
-- Generative track support (evolving music with immutable history)
-- Process-as-value (the declaration itself becomes collectible/valuable)
-
----
-
-## The 40-Year Bet
-
-**Years 1-5**: ∞8 becomes standard for AI-assisted producers and remix culture. Flagship releases demonstrate value. Early platform integrations.
-
-**Years 5-10**: Streaming platforms integrate ∞8 declarations as metadata layer. Listeners can see how music was made. Process transparency becomes expected.
-
-**Years 10-20**: Music IP is valued based on provenance chains and process transparency. ∞8 declarations affect licensing, royalties, and rights management.
-
-**Years 20-40**: All music has machine-readable creative lineage. ∞8 is foundational infrastructure—like TCP/IP for the internet of music provenance.
-
-**We're not solving today's authenticity crisis. We're building the provenance layer for tomorrow's music economy.**
-
----
-
-## Technical Specification
-
-### Declaration Structure
+## Declaration Structure
 
 ```json
 {
   "version": "1.0",
-  "declaration_id": "ø8-[IPFS_CID]",
+  "declaration_id": "∞8-[IPFS_CID]",
   "created_at": "ISO-8601",
   "updated_at": "ISO-8601",
 
@@ -163,52 +87,70 @@ What makes this position defensible.
       "wallet": "0x...",
       "signature": "cryptographic_signature"
     },
-    "collaborators": [],
+    "collaborators": [
+      {
+        "name": "string",
+        "wallet": "0x...",
+        "role": "string",
+        "split_percentage": 0.0
+      }
+    ],
     "contributors": []
   },
 
   "creative_stack": {
-    "daws": [],
-    "plugins": [],
-    "ai_models": [],
-    "hardware": [],
+    "daws": ["Ableton Live 12", "Logic Pro X"],
+    "plugins": ["Serum", "FabFilter Pro-Q3"],
+    "ai_models": ["Suno v3", "AIVA"],
+    "hardware": ["Push 3", "Modular synth"],
     "samples": []
   },
 
   "production_intelligence": {
     "ai_contribution": {
-      "composition": 0.0-1.0,
-      "arrangement": 0.0-1.0,
-      "production": 0.0-1.0,
-      "mixing": 0.0-1.0,
-      "mastering": 0.0-1.0
+      "composition": 0.88,
+      "arrangement": 0.35,
+      "production": 0.12,
+      "mixing": 0.05,
+      "mastering": 0.20
     },
-    "methodology": "string",
-    "notes": "string"
+    "methodology": "Started with AI-generated chord progression (Suno), arranged manually in Ableton, mixed traditionally with FabFilter suite, final master touch with AI balance analysis.",
+    "transparency_score": 95
   },
 
   "provenance": {
-    "ipfs_cid": "Qm...",
-    "source_material": [],
+    "ipfs_cid": "QmXx...",
+    "source_material": ["∞8-QmYy...", "∞8-QmZz..."],
     "samples": [],
-    "stems": []
+    "stems": ["∞8-QmAa..."]
   },
 
-  "revision_history": [],
+  "revision_history": [
+    {
+      "version": 2,
+      "ipfs_cid": "QmBb...",
+      "timestamp": "ISO-8601",
+      "changes": "Increased AI arrangement, updated mixing approach"
+    }
+  ],
 
   "audio_fingerprint": {
-    "sha256": "string",
-    "duration_ms": "integer",
-    "format": "string"
+    "sha256": "a3f5...",
+    "duration_ms": 245000,
+    "format": "wav"
+  },
+
+  "usage_rights": {
+    "training_rights": false,
+    "derivative_rights": true,
+    "remix_rights": true
   }
 }
 ```
 
-### Immutability
+---
 
-Once a declaration is published to IPFS, it cannot be modified—only amended. Amendments are linked to the original via revision history, creating an immutable chain of creative evolution.
-
-### Verification
+## Verification
 
 Any party can verify a declaration by:
 1. Fetching the declaration from IPFS via CID
@@ -216,16 +158,74 @@ Any party can verify a declaration by:
 3. Comparing SHA-256 fingerprint to declared value
 4. Validating cryptographic signatures against stated identities
 
+**Declarations are facts, not claims.**
+
 ---
 
-## Naming Note
+## Tech Stack
+
+- **Frontend:** Next.js 16, React 19, TailwindCSS
+- **Storage:** IPFS (Pinata), Vercel Postgres
+- **Blockchain:** Polygon Amoy (testnet), optional on-chain minting
+- **Wallet:** RainbowKit, Wagmi, Viem
+- **Design:** Brutalist monochrome (∞8 ARCH aesthetic)
+
+---
+
+## Getting Started
+
+### Prerequisites
+- Node.js 18+
+- Pinata API key (IPFS uploads)
+- WalletConnect Project ID
+- Alchemy API key (Polygon RPC)
+
+### Installation
+
+```bash
+# Clone
+git clone https://github.com/bomac1193/inf8.git
+cd inf8/frontend
+
+# Install dependencies
+npm install
+
+# Set up environment variables
+cp .env.example .env
+# Add your API keys to .env
+
+# Run database migration
+npx prisma db push
+
+# Start dev server
+npm run dev
+```
+
+Visit `http://localhost:3000`
+
+---
+
+## Deployment
+
+See [DEPLOY.md](./DEPLOY.md) for complete Vercel deployment guide.
+
+**Quick summary:**
+1. Deploy to Vercel (set Root Directory: `frontend`)
+2. Add Vercel Postgres database
+3. Configure environment variables (Pinata, WalletConnect, Alchemy)
+4. Run Prisma migration
+5. Redeploy
+
+---
+
+## Brand Identity
 
 **∞8 ARCH** (pronounced "inf-eight arch" or "infinite arch")
 
 ### Brand Hierarchy
 ```
 ∞8 ARCH              ← BRAND (symbol, culture, identity)
-└── Declarations     ← PROTOCOL (product, utility)
+└── Declarations     ← PROTOCOL (product v1.0, technical utility)
 ```
 
 - **∞** = infinity, endless creative lineage
@@ -233,27 +233,36 @@ Any party can verify a declaration by:
 - **ARCH** = architectural permanence, eternal structure
 - **Declarations** = machine-readable provenance protocol
 
-Every track has infinite lineage. Every process builds an eternal chain. You are an architect of provenance.
+**Every track has infinite lineage. Every process builds an eternal chain. You are an architect of provenance.**
 
-*Evolution: Ø8 (origin layer) → ∞8 ORIGIN (infinite origin) → ∞8 ARCH (infinite architecture)*
+See [BRAND.md](./BRAND.md) for full brand system documentation.
 
 ---
 
-## Get Started
+## Roadmap
 
-```bash
-# Clone
-git clone https://github.com/bomac1193/O8
+**v1.0 (NOW):** Declarations protocol, IPFS storage, optional on-chain minting
+**v1.5 (Month 3-6):** Platform integrations (streaming services, NFT marketplaces)
+**v2.0 (Year 1):** Remix lineage chains, generative track support, badge marketplace
+**v3.0 (Year 2+):** ∞8 ARCH as foundational music metadata layer
 
-# Generate declaration
-npm run declare
+---
 
-# Publish to IPFS
-npm run publish
+## Philosophy
 
-# Verify existing declaration
-npm run verify [CID]
-```
+**Process is provenance. Mastery is transparent.**
+
+We're not solving today's authenticity crisis. We're building the provenance layer for tomorrow's music economy.
+
+Using AI tools isn't shameful. Using them poorly is.
+
+---
+
+## Contributing
+
+Open protocol. Open source. Open to contributions.
+
+Issues and PRs welcome at https://github.com/bomac1193/inf8
 
 ---
 
@@ -263,4 +272,12 @@ MIT. Open protocol. No gatekeeping.
 
 ---
 
-**Process is provenance. Mastery is transparent. The origin layer.**
+## Contact
+
+**GitHub:** https://github.com/bomac1193/inf8
+**Email:** bomac1193@gmail.com
+**Domain:** inf8.io (coming soon)
+
+---
+
+**Ship v1.0 at 92/100. Let culture finish the score.**
