@@ -506,7 +506,7 @@ export default function NewDeclaration() {
               />
               <div className="mt-1 flex items-center justify-between">
                 <p className="text-[10px] text-[#8A8A8A]">
-                  {methodology.length}/200+ for Process Doc badge 🏷️
+                  {methodology.length}/200+ for Process Doc badge
                 </p>
                 <div className="flex-1 h-1 bg-[#2A2A2A] ml-3 max-w-[100px]">
                   <div
@@ -535,7 +535,7 @@ export default function NewDeclaration() {
 
             {collaborators.length === 0 ? (
               <p className="text-sm text-[#8A8A8A]">
-                No collaborators? Earn Multiplayer badge 👥
+                No collaborators? Earn Multiplayer badge
               </p>
             ) : (
               <div className="space-y-4">
@@ -663,7 +663,7 @@ export default function NewDeclaration() {
               ) : (
                 <>
                   <p className="text-[#8A8A8A] text-sm mb-1">
-                    Drop audio file here ⬇️
+                    Drop audio file here
                   </p>
                   <p className="text-[#8A8A8A] text-xs">
                     Auto IPFS → Pinata → SHA-256 fingerprint
