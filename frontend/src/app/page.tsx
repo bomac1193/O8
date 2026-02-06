@@ -128,7 +128,7 @@ export default function Home() {
                 <span className="text-[#8A8A8A]">  declaration_id</span>
                 <span className="text-[#F5F3F0]">: </span>
                 <span className="text-[#B8A586]">
-                  &quot;o8-Qm...&quot;
+                  &quot;∞8-Qm...&quot;
                 </span>
                 <span className="text-[#F5F3F0]">,</span>
                 {"\n"}
