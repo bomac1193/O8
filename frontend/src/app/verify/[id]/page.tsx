@@ -90,7 +90,7 @@ export default function VerifyPage({
     return (
       <div className="min-h-screen bg-[#0A0A0A] flex items-center justify-center px-6">
         <div className="text-center">
-          <p className="text-xs uppercase tracking-widest text-[#8A8A8A] mb-4">
+          <p className="text-[10px] uppercase tracking-widest text-[#8A8A8A] mb-2">
             Not Found
           </p>
           <h1 className="text-2xl font-medium text-[#F5F3F0] mb-4">
@@ -161,106 +161,107 @@ export default function VerifyPage({
   };
 
   return (
-    <div className="min-h-screen bg-[#0A0A0A] py-12 px-6 md:px-12">
-      <div className="max-w-[960px] mx-auto">
+    <div className="min-h-screen bg-[#0A0A0A] py-6 px-4 md:px-8">
+      <div className="max-w-[800px] mx-auto">
         {/* Back link & Actions */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center justify-between mb-4">
           <Link
             href="/gallery"
-            className="inline-block text-sm text-[#8A8A8A] hover:text-[#F5F3F0] transition-colors duration-100"
+            className="inline-block text-xs text-[#8A8A8A] hover:text-[#F5F3F0] transition-colors duration-100"
           >
-            &larr; Back to Gallery
+            ← Back
           </Link>
-          <Link
-            href={`/new?fromVersion=${declaration.id}`}
-            className="px-4 py-2 bg-[#1A1A1A] border border-[#2A2A2A] text-[#F5F3F0] text-xs uppercase tracking-widest hover:border-[#8A8A8A] transition-colors duration-100"
-            title="Create a new version of this declaration"
-          >
-            + New Version
-          </Link>
+          <div className="flex items-center gap-2">
+            <Link
+              href={`/new?fromVersion=${declaration.id}`}
+              className="px-3 py-1.5 bg-black border border-[#3A3A3A] text-[#F5F3F0] text-[10px] uppercase tracking-widest hover:border-[#F5F3F0] transition-colors duration-100"
+              title="Create a new version"
+            >
+              + Version
+            </Link>
+            <Link
+              href={`/new?fromDerivative=${declaration.id}`}
+              className="px-3 py-1.5 bg-black border border-[#3A3A3A] text-[#F5F3F0] text-[10px] uppercase tracking-widest hover:border-[#F5F3F0] transition-colors duration-100"
+              title="Create a remix/cover/sample"
+            >
+              + Remix
+            </Link>
+          </div>
         </div>
 
-        {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-8">
-          <div>
-            <p className="text-xs uppercase tracking-widest text-[#8A8A8A] mb-2">
+        {/* Header - Compact */}
+        <div className="flex items-start justify-between gap-4 mb-4">
+          <div className="flex-1 min-w-0">
+            <p className="text-[10px] uppercase tracking-widest text-[#8A8A8A] mb-1">
               Declaration
             </p>
-            <h1 className="text-3xl font-medium text-[#F5F3F0] mb-2">
+            <h1 className="text-2xl font-medium text-[#F5F3F0] mb-1 truncate">
               {declaration.title || "Untitled"}
             </h1>
-            <p className="text-[#8A8A8A]">{declaration.artistName}</p>
-          </div>
-          <div className="flex flex-col items-start md:items-end gap-2">
-            {/* Declaration status badge */}
-            <DeclarationBadge declared={true} />
-            {/* Process badges */}
-            <div className="flex flex-wrap gap-1">
-              {badges.map((badge) => (
-                <span
-                  key={badge.key}
-                  className="px-2 py-0.5 text-xs uppercase tracking-widest"
-                  style={{ backgroundColor: badge.color, color: badge.textColor }}
-                >
-                  {badge.label}
-                </span>
-              ))}
-            </div>
-            <p className="text-xs text-[#8A8A8A]">
-              {new Date(declaration.createdAt).toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
+            <p className="text-sm text-[#8A8A8A]">{declaration.artistName}</p>
+            <p className="text-[10px] text-[#8A8A8A] mt-1 font-mono">
+              {new Date(declaration.createdAt).toLocaleDateString()}
             </p>
+          </div>
+          <div className="flex flex-col items-end gap-1 shrink-0">
+            {badges.length > 0 && (
+              <div className="flex flex-wrap gap-1 justify-end">
+                {badges.slice(0, 3).map((badge) => (
+                  <span
+                    key={badge.key}
+                    className="px-1.5 py-0.5 text-[9px] uppercase tracking-wider"
+                    style={{ backgroundColor: badge.color, color: badge.textColor }}
+                  >
+                    {badge.label}
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
-        {/* Score Cards */}
-        <div className="grid md:grid-cols-2 gap-4 mb-6">
-          <div className="p-4 bg-[#1A1A1A] border border-[#2A2A2A]">
-            <p className="text-xs uppercase tracking-widest text-[#8A8A8A] mb-2">
+        {/* Score Cards - Compact */}
+        <div className="grid md:grid-cols-2 gap-3 mb-4">
+          <div className="p-3 bg-black border border-[#3A3A3A]">
+            <p className="text-[10px] uppercase tracking-widest text-[#8A8A8A] mb-1">
               Transparency Score
             </p>
-            <div className="flex items-baseline gap-2 mb-2">
-              <span className="text-4xl font-medium text-[#F5F3F0]">
+            <div className="flex items-baseline gap-2 mb-1">
+              <span className="text-2xl font-medium text-[#F5F3F0] font-mono">
                 {declaration.transparencyScore}
               </span>
-              <span className="text-[#8A8A8A] text-sm">/ 100</span>
+              <span className="text-[#8A8A8A] text-xs">/ 100</span>
             </div>
-            <div className="h-1 bg-[#2A2A2A] mb-1">
+            <div className="h-0.5 bg-[#1A1A1A]">
               <div
-                className="h-full bg-[#8A8A8A] transition-all duration-300"
+                className="h-full bg-[#F5F3F0] transition-all duration-300"
                 style={{ width: `${declaration.transparencyScore}%` }}
               />
             </div>
-            <p className="text-[10px] text-[#8A8A8A]">
-              Based on declaration completeness
-            </p>
           </div>
 
-          <div className="p-4 bg-[#1A1A1A] border border-[#2A2A2A]">
-            <p className="text-xs uppercase tracking-widest text-[#8A8A8A] mb-2">
-              Average AI Contribution
+          <div className="p-3 bg-black border border-[#3A3A3A]">
+            <p className="text-[10px] uppercase tracking-widest text-[#8A8A8A] mb-1">
+              Avg AI Contribution
             </p>
-            <div className="flex items-baseline gap-2 mb-2">
-              <span className="text-4xl font-medium text-[#F5F3F0]">
+            <div className="flex items-baseline gap-2 mb-1">
+              <span className="text-2xl font-medium text-[#F5F3F0] font-mono">
                 {Math.round(avgAI)}
               </span>
-              <span className="text-[#8A8A8A] text-sm">%</span>
+              <span className="text-[#8A8A8A] text-xs">%</span>
             </div>
-            <div className="h-1 bg-[#2A2A2A]">
+            <div className="h-0.5 bg-[#1A1A1A]">
               <div
-                className="h-full bg-[#8A8A8A] transition-all duration-300"
+                className="h-full bg-[#F5F3F0] transition-all duration-300"
                 style={{ width: `${avgAI}%` }}
               />
             </div>
           </div>
         </div>
 
-        {/* Mint on ISSUANCE */}
+        {/* Mint on ISSUANCE - Compact */}
         {declaration.transparencyScore >= 85 && (
-          <div className="p-4 bg-[#1A1A1A] border border-[#8A8A8A] mb-6">
+          <div className="p-3 bg-black border border-[#F5F3F0] mb-4">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div>
                 <p className="text-xs uppercase tracking-widest text-[#8A8A8A] mb-2">
@@ -316,27 +317,27 @@ export default function VerifyPage({
           </div>
         )}
 
-        {/* AI Contribution Breakdown */}
-        <div className="p-4 bg-[#1A1A1A] border border-[#2A2A2A] mb-6">
-          <p className="text-xs uppercase tracking-widest text-[#8A8A8A] mb-4">
+        {/* AI Contribution Breakdown - Compact */}
+        <div className="p-3 bg-black border border-[#3A3A3A] mb-4">
+          <p className="text-[10px] uppercase tracking-widest text-[#8A8A8A] mb-3">
             Production Intelligence
           </p>
-          <div className="grid grid-cols-5 gap-3 mb-4">
+          <div className="grid grid-cols-5 gap-2">
             {[
-              { label: "Composition", value: declaration.aiComposition },
-              { label: "Arrangement", value: declaration.aiArrangement },
-              { label: "Production", value: declaration.aiProduction },
-              { label: "Mixing", value: declaration.aiMixing },
-              { label: "Mastering", value: declaration.aiMastering },
+              { label: "Comp", value: declaration.aiComposition },
+              { label: "Arr", value: declaration.aiArrangement },
+              { label: "Prod", value: declaration.aiProduction },
+              { label: "Mix", value: declaration.aiMixing },
+              { label: "Mstr", value: declaration.aiMastering },
             ].map(({ label, value }) => (
               <div key={label} className="text-center">
-                <p className="text-xl font-medium text-[#F5F3F0] mb-0.5">
+                <p className="text-sm font-mono text-[#F5F3F0] mb-0.5">
                   {value}%
                 </p>
-                <p className="text-[10px] text-[#8A8A8A] mb-1">{label}</p>
-                <div className="h-1 bg-[#2A2A2A]">
+                <p className="text-[9px] text-[#8A8A8A] mb-1">{label}</p>
+                <div className="h-0.5 bg-[#1A1A1A]">
                   <div
-                    className="h-full bg-[#8A8A8A] transition-all duration-300"
+                    className="h-full bg-[#F5F3F0] transition-all duration-300"
                     style={{ width: `${value}%` }}
                   />
                 </div>
@@ -357,9 +358,9 @@ export default function VerifyPage({
         </div>
 
         {/* Collaborators & Consent */}
-        <div className="grid md:grid-cols-2 gap-4 mb-6">
+        <div className="grid md:grid-cols-2 gap-4 mb-4">
           {/* Collaborators */}
-          <div className="p-4 bg-[#1A1A1A] border border-[#2A2A2A]">
+          <div className="p-3 bg-black border border-[#3A3A3A]">
             <p className="text-xs uppercase tracking-widest text-[#8A8A8A] mb-3">
               Collaborators {contributors.length > 0 && '& Revenue Splits'}
             </p>
@@ -395,7 +396,7 @@ export default function VerifyPage({
           </div>
 
           {/* Consent */}
-          <div className="p-4 bg-[#1A1A1A] border border-[#2A2A2A]">
+          <div className="p-3 bg-black border border-[#3A3A3A]">
             <p className="text-xs uppercase tracking-widest text-[#8A8A8A] mb-3">
               Usage Consent
             </p>
@@ -443,7 +444,7 @@ export default function VerifyPage({
         />
 
         {/* Provenance */}
-        <div className="p-4 bg-[#1A1A1A] border border-[#2A2A2A] mb-6">
+        <div className="p-3 bg-black border border-[#3A3A3A] mb-4">
           <p className="text-xs uppercase tracking-widest text-[#8A8A8A] mb-3">
             Provenance
           </p>
@@ -481,7 +482,7 @@ export default function VerifyPage({
         </div>
 
         {/* Embed Snippet */}
-        <div className="p-4 bg-[#1A1A1A] border border-[#2A2A2A] mb-6">
+        <div className="p-3 bg-black border border-[#3A3A3A] mb-4">
           <p className="text-xs uppercase tracking-widest text-[#8A8A8A] mb-3">
             Embed This Declaration
           </p>
@@ -510,7 +511,7 @@ export default function VerifyPage({
         </div>
 
         {/* JSON Export */}
-        <div className="p-4 bg-[#1A1A1A] border border-[#2A2A2A]">
+        <div className="p-3 bg-black border border-[#3A3A3A]">
           <div className="flex items-center justify-between mb-3">
             <p className="text-xs uppercase tracking-widest text-[#8A8A8A]">
               Declaration Export

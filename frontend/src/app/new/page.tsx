@@ -8,6 +8,7 @@ import { keccak256, toBytes } from "viem";
 import { O8RegistryABI } from "@/contracts/abis";
 import { O8_CONTRACTS } from "@/lib/wagmi";
 import { computeSHA256, uploadToPinata } from "@/lib/ipfs";
+import { DeclarationPicker } from "@/components/DeclarationPicker";
 
 interface AIContribution {
   composition: number;
@@ -162,6 +163,10 @@ function NewDeclarationForm() {
   // API save state
   const [isSaving, setIsSaving] = useState(false);
   const [savedId, setSavedId] = useState<string | null>(null);
+
+  // Workflow state
+  const [workflowType, setWorkflowType] = useState<"original" | "version" | "derivative">("original");
+  const [showPicker, setShowPicker] = useState(false);
 
   // Load parent declaration for versioning
   useEffect(() => {
@@ -495,6 +500,134 @@ function NewDeclarationForm() {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-8">
+          {/* Workflow Selector */}
+          <section className="p-6 bg-[#0D0D0D] border border-[#3A3A3A]">
+            <p className="text-xs uppercase tracking-widest text-[#8A8A8A] mb-6">
+              What are you creating?
+            </p>
+            <div className="grid md:grid-cols-3 gap-3">
+              {/* Original Track */}
+              <button
+                type="button"
+                onClick={() => {
+                  setWorkflowType("original");
+                  setParentDeclarationId("");
+                  setParentRelation("original");
+                }}
+                className={`p-6 border-2 text-left transition-all duration-100 ${
+                  workflowType === "original"
+                    ? "border-[#F5F3F0] bg-[#1A1A1A]"
+                    : "border-[#2A2A2A] bg-[#0D0D0D] hover:border-[#3A3A3A]"
+                }`}
+              >
+                <div className="text-3xl mb-3">✨</div>
+                <p className="text-sm font-medium text-[#F5F3F0] mb-2">Brand New Track</p>
+                <p className="text-xs text-[#8A8A8A] leading-relaxed">
+                  Original composition with no source material
+                </p>
+              </button>
+
+              {/* New Version */}
+              <button
+                type="button"
+                onClick={() => {
+                  setWorkflowType("version");
+                  setShowPicker(true);
+                }}
+                className={`p-6 border-2 text-left transition-all duration-100 ${
+                  workflowType === "version"
+                    ? "border-[#F5F3F0] bg-[#1A1A1A]"
+                    : "border-[#2A2A2A] bg-[#0D0D0D] hover:border-[#3A3A3A]"
+                }`}
+              >
+                <div className="text-3xl mb-3">🔄</div>
+                <p className="text-sm font-medium text-[#F5F3F0] mb-2">New Version</p>
+                <p className="text-xs text-[#8A8A8A] leading-relaxed">
+                  Revision or iteration of your own track
+                </p>
+                {workflowType === "version" && parentDeclarationId && (
+                  <p className="text-xs text-[#4A7C59] mt-2 font-mono truncate">
+                    → {parentDeclarationId.substring(0, 16)}...
+                  </p>
+                )}
+              </button>
+
+              {/* Derivative Work */}
+              <button
+                type="button"
+                onClick={() => {
+                  setWorkflowType("derivative");
+                  setShowPicker(true);
+                }}
+                className={`p-6 border-2 text-left transition-all duration-100 ${
+                  workflowType === "derivative"
+                    ? "border-[#F5F3F0] bg-[#1A1A1A]"
+                    : "border-[#2A2A2A] bg-[#0D0D0D] hover:border-[#3A3A3A]"
+                }`}
+              >
+                <div className="text-3xl mb-3">🎛️</div>
+                <p className="text-sm font-medium text-[#F5F3F0] mb-2">Remix/Cover/Sample</p>
+                <p className="text-xs text-[#8A8A8A] leading-relaxed">
+                  Derivative work based on another track
+                </p>
+                {workflowType === "derivative" && parentDeclarationId && (
+                  <p className="text-xs text-[#4A7C59] mt-2 font-mono truncate">
+                    → {parentDeclarationId.substring(0, 16)}...
+                  </p>
+                )}
+              </button>
+            </div>
+
+            {/* Show relationship selector for derivative */}
+            {workflowType === "derivative" && parentDeclarationId && (
+              <div className="mt-4 p-4 bg-[#1A1A1A] border border-[#2A2A2A]">
+                <p className="text-xs text-[#8A8A8A] mb-3">Select relationship type:</p>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                  {["remix", "cover", "sample", "interpolation"].map((type) => (
+                    <button
+                      key={type}
+                      type="button"
+                      onClick={() => setParentRelation(type)}
+                      className={`px-3 py-2 text-xs capitalize border transition-colors duration-100 ${
+                        parentRelation === type
+                          ? "border-[#F5F3F0] text-[#F5F3F0] bg-[#2A2A2A]"
+                          : "border-[#2A2A2A] text-[#8A8A8A] hover:border-[#3A3A3A]"
+                      }`}
+                    >
+                      {type}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </section>
+
+          {/* Declaration Picker Modal */}
+          <DeclarationPicker
+            isOpen={showPicker}
+            onClose={() => setShowPicker(false)}
+            onSelect={(id, sourceTitle) => {
+              setParentDeclarationId(id);
+              if (workflowType === "version") {
+                setParentRelation("revision");
+                // Auto-increment title
+                const versionMatch = title.match(/\(v(\d+)\)$/);
+                if (versionMatch) {
+                  const nextVersion = parseInt(versionMatch[1]) + 1;
+                  setTitle(title.replace(/\(v\d+\)$/, `(v${nextVersion})`));
+                } else {
+                  setTitle(sourceTitle + " (v2)");
+                }
+              } else if (workflowType === "derivative") {
+                // Suggest title based on source
+                if (!title) {
+                  setTitle(sourceTitle + " (Remix)");
+                }
+              }
+            }}
+            currentArtist={artistName}
+          />
+
           {/* Workflow Templates */}
           <section className="p-4 bg-[#1A1A1A] border border-[#8A8A8A]">
             <p className="text-xs uppercase tracking-widest text-[#8A8A8A] mb-3">

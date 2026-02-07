@@ -215,90 +215,83 @@ export default function Gallery() {
             Loading declarations...
           </div>
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-3">
             {filteredDeclarations.map((dec) => {
               const avgAI = calculateAverageAI(dec);
               const badges = getBadges(dec.badge);
               const canDelete = !dec.artistWallet && !dec.tokenId;
               return (
-                <div key={dec.id} className="relative">
+                <div key={dec.id} className="relative group">
                   <Link href={`/verify/${dec.id}`}>
-                    <div className="group p-6 bg-[#1A1A1A] border border-[#2A2A2A] hover:border-[#8A8A8A] transition-colors duration-100 cursor-pointer">
-                      {/* Header Row */}
-                      <div className="flex items-start justify-between mb-4">
-                        <div>
-                          <div className="flex items-center gap-2 mb-1 flex-wrap">
-                            <h3 className="font-medium text-[#F5F3F0]">
+                    <div className="p-4 bg-black border border-[#3A3A3A] hover:border-[#F5F3F0] transition-colors duration-100 cursor-pointer">
+                      {/* Header Row - Compact */}
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-0.5">
+                            <h3 className="text-sm font-medium text-[#F5F3F0] truncate">
                               {dec.title || "Untitled"}
                             </h3>
-                            {badges.map((badge) => (
-                              <span
-                                key={badge.key}
-                                className="px-2 py-0.5 text-xs uppercase tracking-widest"
-                                style={{ backgroundColor: badge.color, color: badge.textColor }}
-                              >
-                                {badge.label}
+                            {badges.length > 0 && (
+                              <span className="text-[10px] text-[#8A8A8A] font-mono shrink-0">
+                                [{badges.length}]
                               </span>
-                            ))}
+                            )}
                           </div>
-                          <p className="text-sm text-[#8A8A8A]">{dec.artistName}</p>
+                          <p className="text-xs text-[#8A8A8A]">{dec.artistName}</p>
                         </div>
-                        <div className="text-right">
-                          <p className="text-sm text-[#8A8A8A]">Score</p>
-                          <p className="text-lg font-medium text-[#F5F3F0]">
+                        <div className="text-right shrink-0 ml-4">
+                          <p className="text-xs text-[#8A8A8A] mb-0.5">Score</p>
+                          <p className="text-sm font-mono text-[#F5F3F0]">
                             {dec.transparencyScore}
                           </p>
                         </div>
                       </div>
 
-                    {/* AI Contribution Bars */}
-                    <div className="grid grid-cols-5 gap-4 mb-4">
-                      {[
-                        { label: "Comp", value: dec.aiComposition / 100 },
-                        { label: "Arr", value: dec.aiArrangement / 100 },
-                        { label: "Prod", value: dec.aiProduction / 100 },
-                        { label: "Mix", value: dec.aiMixing / 100 },
-                        { label: "Master", value: dec.aiMastering / 100 },
-                      ].map(({ label, value }) => (
-                        <div key={label} className="text-center">
-                          <div className="h-1 bg-[#2A2A2A] mb-2">
-                            <div
-                              className="h-full bg-[#8A8A8A] transition-all duration-300"
-                              style={{ width: `${value * 100}%` }}
-                            />
+                      {/* AI Contribution - Compact Inline Bars */}
+                      <div className="flex items-center gap-2 mb-2">
+                        {[
+                          { label: "C", value: dec.aiComposition / 100, title: "Composition" },
+                          { label: "A", value: dec.aiArrangement / 100, title: "Arrangement" },
+                          { label: "P", value: dec.aiProduction / 100, title: "Production" },
+                          { label: "M", value: dec.aiMixing / 100, title: "Mixing" },
+                          { label: "Ms", value: dec.aiMastering / 100, title: "Mastering" },
+                        ].map(({ label, value, title }) => (
+                          <div key={label} className="flex-1" title={`${title}: ${Math.round(value * 100)}%`}>
+                            <div className="h-1 bg-[#1A1A1A]">
+                              <div
+                                className="h-full bg-[#F5F3F0] transition-all duration-300"
+                                style={{ width: `${value * 100}%` }}
+                              />
+                            </div>
                           </div>
-                          <p className="text-xs text-[#8A8A8A]">{label}</p>
-                          <p className="text-xs text-[#F5F3F0]">
-                            {Math.round(value * 100)}%
-                          </p>
-                        </div>
-                      ))}
-                    </div>
+                        ))}
+                      </div>
 
-                    {/* Footer */}
-                    <div className="flex items-center justify-between pt-4 border-t border-[#2A2A2A]">
-                      <p className="text-xs text-[#8A8A8A]">
-                        Avg AI: {Math.round(avgAI * 100)}%
-                      </p>
-                      <p className="text-xs text-[#8A8A8A]">
-                        {new Date(dec.createdAt).toLocaleDateString()}
-                      </p>
+                      {/* Footer - Compact */}
+                      <div className="flex items-center justify-between text-[10px] text-[#8A8A8A] font-mono">
+                        <span>AVG {Math.round(avgAI * 100)}%</span>
+                        <span>{new Date(dec.createdAt).toLocaleDateString()}</span>
+                      </div>
                     </div>
-                  </div>
-                </Link>
+                  </Link>
 
-                {/* Delete Button (Beta - Anonymous Only) */}
-                {canDelete && (
-                  <button
-                    onClick={(e) => handleDelete(dec.id, e)}
-                    disabled={deleting === dec.id}
-                    className="absolute top-2 right-2 px-3 py-1 text-xs bg-[#2A2A2A] text-[#8A8A8A] hover:bg-[#3A3A3A] hover:text-[#F5F3F0] border border-[#3A3A3A] transition-colors duration-100 disabled:opacity-50 disabled:cursor-not-allowed z-10"
-                    title="Delete this anonymous declaration (beta testing only)"
-                  >
-                    {deleting === dec.id ? 'Deleting...' : 'Delete'}
-                  </button>
-                )}
-              </div>
+                  {/* Delete Button - X in top right */}
+                  {canDelete && (
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (confirm(`Delete "${dec.title || 'Untitled'}"?\n\nThis cannot be undone.`)) {
+                          handleDelete(dec.id, e);
+                        }
+                      }}
+                      disabled={deleting === dec.id}
+                      className="absolute top-2 right-2 w-6 h-6 flex items-center justify-center text-[#8A8A8A] hover:text-[#F5F3F0] bg-black/80 border border-[#3A3A3A] hover:border-[#F5F3F0] transition-all duration-100 disabled:opacity-50 disabled:cursor-not-allowed opacity-0 group-hover:opacity-100 z-10"
+                      title="Delete declaration"
+                    >
+                      {deleting === dec.id ? '...' : '×'}
+                    </button>
+                  )}
+                </div>
               );
             })}
           </div>
